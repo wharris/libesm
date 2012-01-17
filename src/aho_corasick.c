@@ -469,11 +469,6 @@ ac_state_queue_get(ac_list* self) {
 // --------------------------------------------------------------------------
 // Index object
 
-/**
- * Construct a new index. The state is initially 'unfixed', meaning that the
- * user can enter new keywords but can not query the index. Returns a pointer
- * to the ac_index or NULL if an error was encountered.
- */
 ac_index*
 ac_index_new(void) {
     ac_index* self;
@@ -491,12 +486,6 @@ ac_index_new(void) {
     return self;
 }
 
-/**
- * Free the index and all its subordinate objects. The provided object_free
- * function should do whatever necessary to free each associated object. It is
- * called once for each associated object that was given to ac_index_enter.
- * Returns AC_SUCCESS if successful of AC_FAILURE is an error was encountered.
- */
 ac_error_code
 ac_index_free(ac_index* self, ac_free_function object_free) {
 
@@ -533,18 +522,15 @@ ac_index_free(ac_index* self, ac_free_function object_free) {
     return result;
 }
 
-/**
- * Add a keyword and an associated object to the index. This is an
- * implementation of the enter procedure of 'Algorithm 2. Construction of the
- * goto function.' from the paper. Returns AC_SUCCESS if the keyword and 
- * object were added successfully or AC_FAILURE if an error was encountered
- * or if the index is not 'unfixed'.
- */
 ac_error_code
 ac_index_enter(ac_index* self,
                ac_symbol* keyword,
                ac_offset size,
                void* object) {
+
+    // This is an implementation of the enter procedure of 'Algorithm 2.
+    // Construction of the goto function.' from the paper.
+    
     ac_state* state = self->state_0;
     ac_offset j = 0;
     ac_state* new_state = NULL;
@@ -597,6 +583,10 @@ ac_index_enter(ac_index* self,
  */
 ac_error_code
 ac_index_fix(ac_index* self) {
+    // This is an implementation of the last part of Algorithm 2 from the paper
+    // combined with an implementation of 'Algorithm 3. Construction of the
+    // failure function.' from the paper.
+
     int             symbol;
     ac_state*       state = NULL;
     ac_state*       r = NULL;
@@ -689,19 +679,14 @@ ac_index_fix(ac_index* self) {
     return AC_SUCCESS;
 }
 
-/**
- * Query the index with the given phrase of the given size. Matching keyword
- * spans and associated objects are sent with result_cb_data to result_cb.
- * This function is an implementation of 'Algorithm 1. Pattern matching 
- * machine.' from the paper. Returns AC_SUCCESS if the query was successful
- * (even if there were no matches) or AC_FAILURE if an error was encountered.
- */
 ac_error_code ac_index_query_cb(ac_index* self,
                                 ac_symbol* phrase,
                                 ac_offset size,
                                 ac_result_callback result_cb,
                                 void* result_cb_data)
 {
+    // This function is an implementation of 'Algorithm 1. Pattern matching 
+    // machine.' from the paper.
     ac_state* state = self->state_0;
     ac_state* next = NULL;
     ac_offset j = 0;
