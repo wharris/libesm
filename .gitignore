@@ -20,3 +20,4 @@ missing
 libtool
 libesm-1.0.tar.gz
 build
+test/run_tests

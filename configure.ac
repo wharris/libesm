@@ -6,4 +6,4 @@ AM_INIT_AUTOMAKE([libesm], [1.0])
 AC_PROG_CC
 AC_PROG_LIBTOOL
 
-AC_OUTPUT([Makefile src/Makefile])
+AC_OUTPUT([Makefile src/Makefile test/Makefile])
